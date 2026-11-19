@@ -1,0 +1,42 @@
+package co.edu.unicauca.saberpro.question.domain.model;
+
+import co.edu.unicauca.saberpro.question.domain.exception.ReglaNegocioException;
+
+import java.util.Objects;
+
+/**
+ * Objeto de Valor inmutable que representa el enunciado de una pregunta.
+ * Invariante: el texto no puede ser nulo ni vacío.
+ */
+public final class Enunciado {
+
+    private final String texto;
+
+    public Enunciado(String texto) {
+        if (texto == null || texto.isBlank()) {
+            throw new ReglaNegocioException("El enunciado no puede ser nulo ni vacío");
+        }
+        this.texto = texto.trim();
+    }
+
+    public String getTexto() {
+        return texto;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Enunciado other)) return false;
+        return texto.equals(other.texto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(texto);
+    }
+
+    @Override
+    public String toString() {
+        return texto;
+    }
+}
