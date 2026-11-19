@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>C4 Nivel 2 - Contenedores</title><link rel="stylesheet" href="c4.css"></head>
+<body>
+<svg width="1300" height="900" viewBox="0 0 1300 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker>
+  </defs>
+  <text x="30" y="40" class="title">[Diagrama de Contenedores] Banco de Preguntas Saber PRO</text>
+  <text x="30" y="62" class="subtitle">Modelo C4 – Nivel 2. Contenedores Docker orquestados con Docker Compose en la red bridge saberpro-net.</text>
+
+  <!-- Persona -->
+  <g transform="translate(540,85)">
+    <circle cx="110" cy="24" r="24" class="person"/>
+    <rect x="0" y="44" width="220" height="86" rx="20" class="person"/>
+    <text x="110" y="76" text-anchor="middle" class="name">Docente / Comité</text>
+    <text x="110" y="94" text-anchor="middle" class="tech">[Persona]</text>
+    <text x="110" y="114" text-anchor="middle" class="desc">vía Thunder Client / navegador</text>
+  </g>
+
+  <!-- Frontera -->
+  <rect x="40" y="250" width="1220" height="610" rx="14" class="boundary"/>
+  <text x="58" y="275" class="blabel">Docker Compose · red bridge "saberpro-net"</text>
+
+  <!-- validation -->
+  <g transform="translate(80,320)">
+    <rect width="300" height="160" rx="10" class="container"/>
+    <text x="150" y="36" text-anchor="middle" class="name">validation-service</text>
+    <text x="150" y="55" text-anchor="middle" class="tech">[Contenedor: Spring Boot 3 / Java 17 · :8082]</text>
+    <text x="150" y="82" text-anchor="middle" class="desc">Pipeline de filtros (Pipes &amp; Filters)</text>
+    <text x="150" y="99" text-anchor="middle" class="desc">que valida la redacción: enunciado,</text>
+    <text x="150" y="116" text-anchor="middle" class="desc">opciones vacías o repetidas.</text>
+    <text x="150" y="140" text-anchor="middle" class="desc">Responde 200 (válida) / 400 (errores)</text>
+  </g>
+
+  <!-- question -->
+  <g transform="translate(500,320)">
+    <rect width="300" height="160" rx="10" class="container"/>
+    <text x="150" y="36" text-anchor="middle" class="name">question-service</text>
+    <text x="150" y="55" text-anchor="middle" class="tech">[Contenedor: Spring Boot 3 / Java 17 · :8083]</text>
+    <text x="150" y="82" text-anchor="middle" class="desc">Núcleo DDD + Arquitectura Hexagonal.</text>
+    <text x="150" y="99" text-anchor="middle" class="desc">API REST de preguntas, casos de uso,</text>
+    <text x="150" y="116" text-anchor="middle" class="desc">persistencia JPA / memoria y</text>
+    <text x="150" y="133" text-anchor="middle" class="desc">publicación de eventos AMQP.</text>
+  </g>
+
+  <!-- lifecycle -->
+  <g transform="translate(920,320)">
+    <rect width="300" height="160" rx="10" class="container"/>
+    <text x="150" y="36" text-anchor="middle" class="name">lifecycle-service</text>
+    <text x="150" y="55" text-anchor="middle" class="tech">[Contenedor: Spring Boot 3 / Java 17 · :8084]</text>
+    <text x="150" y="82" text-anchor="middle" class="desc">Consumidor @RabbitListener que</text>
+    <text x="150" y="99" text-anchor="middle" class="desc">recibe las solicitudes de revisión y</text>
+    <text x="150" y="116" text-anchor="middle" class="desc">las expone en GET /api/revisiones.</text>
+  </g>
+
+  <!-- postgres (cilindro) -->
+  <g transform="translate(500,640)">
+    <path d="M0,22 A150,22 0 0 1 300,22 L300,158 A150,22 0 0 1 0,158 Z" class="db"/>
+    <ellipse cx="150" cy="22" rx="150" ry="22" fill="#5aa0e0"/>
+    <text x="150" y="72" text-anchor="middle" class="name">PostgreSQL 16</text>
+    <text x="150" y="91" text-anchor="middle" class="tech">[Contenedor: base de datos · :5432 interno]</text>
+    <text x="150" y="116" text-anchor="middle" class="desc">Tablas preguntas y</text>
+    <text x="150" y="133" text-anchor="middle" class="desc">opciones_respuesta (volumen saberpro-pgdata)</text>
+  </g>
+
+  <!-- rabbit -->
+  <g transform="translate(920,640)">
+    <rect width="300" height="170" rx="10" class="container"/>
+    <text x="150" y="36" text-anchor="middle" class="name">RabbitMQ 3 (management)</text>
+    <text x="150" y="55" text-anchor="middle" class="tech">[Contenedor: broker AMQP · :5672 / :15672]</text>
+    <text x="150" y="82" text-anchor="middle" class="desc">Exchange directo</text>
+    <text x="150" y="99" text-anchor="middle" class="desc">saberpro.preguntas.exchange</text>
+    <text x="150" y="121" text-anchor="middle" class="desc">Cola durable:</text>
+    <text x="150" y="138" text-anchor="middle" class="desc">pregunta.revisar.queue</text>
+  </g>
+
+  <!-- relaciones -->
+  <path d="M650,215 L650,318" class="arrow" marker-end="url(#ah)"/>
+  <text x="660" y="250" class="rel-b">Crea, consulta y envía a revisión</text>
+  <text x="660" y="266" class="rel">[JSON/HTTP · :8083]</text>
+
+  <path d="M760,180 C1000,190 1060,230 1070,318" class="arrow" marker-end="url(#ah)"/>
+  <text x="900" y="205" class="rel-b">Consulta revisiones recibidas</text>
+  <text x="935" y="221" class="rel">[JSON/HTTP · :8084]</text>
+
+  <path d="M500,400 L382,400" class="arrow" marker-end="url(#ah)"/>
+  <text x="392" y="385" class="rel-b">Valida la pregunta</text>
+  <text x="392" y="420" class="rel">[REST síncrono</text>
+  <text x="392" y="435" class="rel"> POST /api/</text>
+  <text x="392" y="450" class="rel"> validaciones/</text>
+  <text x="392" y="465" class="rel"> preguntas]</text>
+
+  <path d="M650,480 L650,638" class="arrow" marker-end="url(#ah)"/>
+  <text x="660" y="560" class="rel-b">Lee y escribe</text>
+  <text x="660" y="576" class="rel">[JDBC / Spring Data JPA]</text>
+
+  <path d="M800,450 C880,520 960,560 1000,638" class="arrow-d" marker-end="url(#ah)"/>
+  <text x="815" y="530" class="rel-b">Publica SolicitudRevisionEvent</text>
+  <text x="840" y="546" class="rel">[AMQP asíncrono · 202 Accepted]</text>
+
+  <path d="M1140,638 L1140,482" class="arrow-d" marker-end="url(#ah)"/>
+  <text x="1148" y="560" class="rel-b">Consume</text>
+  <text x="1148" y="576" class="rel">[AMQP]</text>
+
+  <!-- leyenda -->
+  <g transform="translate(80,640)">
+    <rect width="300" height="150" fill="#fafafa" stroke="#ccc"/>
+    <text x="12" y="22" class="legend" font-weight="bold">Leyenda</text>
+    <rect x="12" y="34" width="18" height="14" class="person"/><text x="38" y="46" class="legend">Persona</text>
+    <rect x="12" y="56" width="18" height="14" class="container"/><text x="38" y="68" class="legend">Contenedor (imagen Docker)</text>
+    <line x1="12" y1="88" x2="34" y2="88" class="arrow"/><text x="40" y="92" class="legend">Comunicación síncrona (HTTP/JDBC)</text>
+    <line x1="12" y1="110" x2="34" y2="110" class="arrow-d"/><text x="40" y="114" class="legend">Comunicación asíncrona (AMQP)</text>
+    <text x="12" y="138" class="legend">DNS interno: nombre del servicio</text>
+  </g>
+</svg>
+</body></html>

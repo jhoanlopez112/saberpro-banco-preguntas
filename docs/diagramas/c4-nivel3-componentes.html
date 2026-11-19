@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>C4 Nivel 3 - Componentes</title><link rel="stylesheet" href="c4.css"></head>
+<body>
+<svg width="1400" height="1000" viewBox="0 0 1400 1000" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker>
+  </defs>
+  <text x="30" y="40" class="title">[Diagrama de Componentes] question-service (Arquitectura Hexagonal)</text>
+  <text x="30" y="62" class="subtitle">Modelo C4 – Nivel 3. Adaptadores primarios → puertos de entrada → aplicación/dominio → puertos de salida → adaptadores secundarios.</text>
+
+  <!-- externos arriba -->
+  <g transform="translate(560,85)">
+    <rect width="280" height="70" rx="10" class="ext"/>
+    <text x="140" y="32" text-anchor="middle" class="name">Cliente HTTP</text>
+    <text x="140" y="52" text-anchor="middle" class="tech">[Thunder Client / Postman]</text>
+  </g>
+
+  <!-- Frontera del contenedor -->
+  <rect x="30" y="185" width="1340" height="610" rx="14" class="boundary"/>
+  <text x="48" y="208" class="blabel">Contenedor: question-service [Spring Boot · :8083]</text>
+
+  <!-- Capa API -->
+  <rect x="50" y="222" width="1300" height="118" rx="14" class="layer" stroke="#7a52b3"/>
+  <text x="66" y="244" class="layer-label" fill="#7a52b3">api/ · adaptador primario</text>
+  <g transform="translate(420,250)">
+    <rect width="270" height="80" rx="8" class="component"/>
+    <text x="135" y="26" text-anchor="middle" class="component-name">QuestionRestController</text>
+    <text x="135" y="43" text-anchor="middle" class="component-tech">[@RestController /api/preguntas]</text>
+    <text x="135" y="62" text-anchor="middle" class="component-desc">Traduce HTTP ↔ comandos/DTO</text>
+  </g>
+  <g transform="translate(720,250)">
+    <rect width="270" height="80" rx="8" class="component"/>
+    <text x="135" y="26" text-anchor="middle" class="component-name">GlobalExceptionHandler</text>
+    <text x="135" y="43" text-anchor="middle" class="component-tech">[@RestControllerAdvice]</text>
+    <text x="135" y="62" text-anchor="middle" class="component-desc">ReglaNegocioException → 400</text>
+  </g>
+
+  <!-- Núcleo -->
+  <rect x="50" y="355" width="1300" height="250" rx="14" class="layer" stroke="#c28a00"/>
+  <text x="66" y="377" class="layer-label" fill="#a07000">domain/ + application/ · núcleo (Java puro, sin Spring ni JPA)</text>
+
+  <g transform="translate(80,395)">
+    <rect width="290" height="90" rx="8" class="component"/>
+    <text x="145" y="24" text-anchor="middle" class="component-name">Puertos de entrada</text>
+    <text x="145" y="41" text-anchor="middle" class="component-tech">[domain.ports.inbound · interfaces]</text>
+    <text x="145" y="60" text-anchor="middle" class="component-desc">CrearPreguntaUseCase</text>
+    <text x="145" y="76" text-anchor="middle" class="component-desc">EvaluarPreguntaUseCase · ConsultarPreguntaUseCase</text>
+  </g>
+  <g transform="translate(470,395)">
+    <rect width="300" height="90" rx="8" class="component"/>
+    <text x="150" y="24" text-anchor="middle" class="component-name">QuestionApplicationService</text>
+    <text x="150" y="41" text-anchor="middle" class="component-tech">[application · orquestación]</text>
+    <text x="150" y="60" text-anchor="middle" class="component-desc">Implementa los casos de uso y</text>
+    <text x="150" y="76" text-anchor="middle" class="component-desc">depende solo de puertos de salida</text>
+  </g>
+  <g transform="translate(470,505)">
+    <rect width="300" height="88" rx="8" class="component"/>
+    <text x="150" y="24" text-anchor="middle" class="component-name">Agregado Question</text>
+    <text x="150" y="41" text-anchor="middle" class="component-tech">[domain.model · Raíz del Agregado + VO]</text>
+    <text x="150" y="60" text-anchor="middle" class="component-desc">Enunciado · Justificacion · AnswerOption</text>
+    <text x="150" y="76" text-anchor="middle" class="component-desc">Invariantes: 4 opciones, 1 clave</text>
+  </g>
+  <g transform="translate(870,395)">
+    <rect width="300" height="90" rx="8" class="component"/>
+    <text x="150" y="24" text-anchor="middle" class="component-name">Puertos de salida</text>
+    <text x="150" y="41" text-anchor="middle" class="component-tech">[domain.ports.outbound · interfaces]</text>
+    <text x="150" y="60" text-anchor="middle" class="component-desc">PreguntaRepositoryPort · NotificacionPort</text>
+    <text x="150" y="76" text-anchor="middle" class="component-desc">ValidacionPort</text>
+  </g>
+  <g transform="translate(80,505)">
+    <rect width="300" height="88" rx="8" class="component" style="fill:#d6e9fb"/>
+    <text x="150" y="24" text-anchor="middle" class="component-name">HexagonalConfig</text>
+    <text x="150" y="41" text-anchor="middle" class="component-tech">[infrastructure.config · @Configuration]</text>
+    <text x="150" y="60" text-anchor="middle" class="component-desc">@Bean conecta puertos ↔ adaptadores</text>
+    <text x="150" y="76" text-anchor="middle" class="component-desc">saberpro.persistence.adapter=jpa|memory</text>
+  </g>
+
+  <!-- Infraestructura -->
+  <rect x="50" y="620" width="1300" height="160" rx="14" class="layer" stroke="#2f7d4f"/>
+  <text x="66" y="642" class="layer-label" fill="#2f7d4f">infrastructure/ · adaptadores secundarios</text>
+  <g transform="translate(70,655)">
+    <rect width="300" height="110" rx="8" class="component"/>
+    <text x="150" y="22" text-anchor="middle" class="component-name">JpaQuestionAdapter</text>
+    <text x="150" y="38" text-anchor="middle" class="component-tech">[jpa · Spring Data JPA]</text>
+    <text x="150" y="58" text-anchor="middle" class="component-desc">QuestionRecord (@Entity)</text>
+    <text x="150" y="74" text-anchor="middle" class="component-desc">QuestionDomainMapper</text>
+    <text x="150" y="90" text-anchor="middle" class="component-desc">SpringDataQuestionRepository</text>
+  </g>
+  <g transform="translate(390,655)">
+    <rect width="290" height="110" rx="8" class="component"/>
+    <text x="145" y="22" text-anchor="middle" class="component-name">InMemoryQuestionAdapter</text>
+    <text x="145" y="38" text-anchor="middle" class="component-tech">[memory · HashMap]</text>
+    <text x="145" y="62" text-anchor="middle" class="component-desc">Implementación alternativa del</text>
+    <text x="145" y="78" text-anchor="middle" class="component-desc">mismo puerto (intercambiable)</text>
+  </g>
+  <g transform="translate(700,655)">
+    <rect width="290" height="110" rx="8" class="component"/>
+    <text x="145" y="22" text-anchor="middle" class="component-name">RabbitMQPublisher</text>
+    <text x="145" y="38" text-anchor="middle" class="component-tech">[messaging · RabbitTemplate]</text>
+    <text x="145" y="62" text-anchor="middle" class="component-desc">Publica SolicitudRevisionEvent</text>
+    <text x="145" y="78" text-anchor="middle" class="component-desc">routing key pregunta.revisar</text>
+  </g>
+  <g transform="translate(1010,655)">
+    <rect width="320" height="110" rx="8" class="component"/>
+    <text x="160" y="22" text-anchor="middle" class="component-name">ValidationServiceClient</text>
+    <text x="160" y="38" text-anchor="middle" class="component-tech">[rest · Spring RestClient]</text>
+    <text x="160" y="62" text-anchor="middle" class="component-desc">POST /api/validaciones/preguntas</text>
+    <text x="160" y="78" text-anchor="middle" class="component-desc">200 válida · 400 con errores</text>
+  </g>
+
+  <!-- externos abajo -->
+  <g transform="translate(70,860)">
+    <path d="M0,16 A150,16 0 0 1 300,16 L300,104 A150,16 0 0 1 0,104 Z" class="db"/>
+    <ellipse cx="150" cy="16" rx="150" ry="16" fill="#5aa0e0"/>
+    <text x="150" y="60" text-anchor="middle" class="name">PostgreSQL / H2</text>
+    <text x="150" y="80" text-anchor="middle" class="tech">[Base de datos]</text>
+  </g>
+  <g transform="translate(700,860)">
+    <rect width="290" height="110" rx="10" class="container"/>
+    <text x="145" y="48" text-anchor="middle" class="name">RabbitMQ</text>
+    <text x="145" y="68" text-anchor="middle" class="tech">[pregunta.revisar.queue]</text>
+  </g>
+  <g transform="translate(1010,860)">
+    <rect width="320" height="110" rx="10" class="container"/>
+    <text x="160" y="48" text-anchor="middle" class="name">validation-service</text>
+    <text x="160" y="68" text-anchor="middle" class="tech">[Contenedor :8082]</text>
+  </g>
+
+  <!-- flechas -->
+  <path d="M640,155 L580,248" class="arrow" marker-end="url(#ah)"/>
+  <text x="625" y="185" class="rel">JSON/HTTP</text>
+  <path d="M500,330 L300,393" class="arrow" marker-end="url(#ah)"/>
+  <text x="330" y="355" class="rel">invoca</text>
+  <path d="M370,440 L468,440" class="arrow" marker-end="url(#ah)"/>
+  <text x="378" y="432" class="rel">implementa</text>
+  <path d="M620,485 L620,503" class="arrow" marker-end="url(#ah)"/>
+  <path d="M770,440 L868,440" class="arrow" marker-end="url(#ah)"/>
+  <text x="776" y="432" class="rel">usa</text>
+  <path d="M220,765 L220,858" class="arrow" marker-end="url(#ah)"/>
+  <path d="M845,765 L845,858" class="arrow-d" marker-end="url(#ah)"/>
+  <text x="852" y="815" class="rel">AMQP</text>
+  <path d="M1170,765 L1170,858" class="arrow" marker-end="url(#ah)"/>
+  <text x="1178" y="815" class="rel">REST</text>
+  <!-- implementan puertos -->
+  <path d="M220,655 L220,612 L1170,612 L1170,655" class="arrow-d"/>
+  <path d="M535,655 L535,612 M845,655 L845,612" class="arrow-d"/>
+  <path d="M1020,612 L1020,489" class="arrow-d" marker-end="url(#ah)"/>
+  <text x="1030" y="560" class="rel-b">implementan los</text>
+  <text x="1030" y="576" class="rel-b">puertos de salida</text>
+</svg>
+</body></html>

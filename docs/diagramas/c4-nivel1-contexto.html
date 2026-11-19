@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>C4 Nivel 1 - Contexto</title><link rel="stylesheet" href="c4.css"></head>
+<body>
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker>
+  </defs>
+  <text x="30" y="40" class="title">[Diagrama de Contexto] Banco de Preguntas Saber PRO</text>
+  <text x="30" y="62" class="subtitle">Modelo C4 – Nivel 1. Personas y sistemas que interactúan con el banco de preguntas.</text>
+
+  <!-- Docente autor -->
+  <g transform="translate(110,110)">
+    <circle cx="95" cy="28" r="28" class="person"/>
+    <rect x="0" y="52" width="190" height="118" rx="22" class="person"/>
+    <text x="95" y="90" text-anchor="middle" class="name">Docente autor</text>
+    <text x="95" y="108" text-anchor="middle" class="tech">[Persona]</text>
+    <text x="95" y="130" text-anchor="middle" class="desc">Redacta preguntas tipo</text>
+    <text x="95" y="146" text-anchor="middle" class="desc">Saber PRO y las envía</text>
+    <text x="95" y="162" text-anchor="middle" class="desc">a revisión.</text>
+  </g>
+
+  <!-- Comité académico -->
+  <g transform="translate(880,110)">
+    <circle cx="105" cy="28" r="28" class="person"/>
+    <rect x="0" y="52" width="210" height="118" rx="22" class="person"/>
+    <text x="105" y="90" text-anchor="middle" class="name">Comité académico</text>
+    <text x="105" y="108" text-anchor="middle" class="tech">[Persona]</text>
+    <text x="105" y="130" text-anchor="middle" class="desc">Revisa, aprueba o rechaza</text>
+    <text x="105" y="146" text-anchor="middle" class="desc">las preguntas pendientes</text>
+    <text x="105" y="162" text-anchor="middle" class="desc">de revisión.</text>
+  </g>
+
+  <!-- Sistema principal -->
+  <g transform="translate(380,350)">
+    <rect x="0" y="0" width="440" height="170" rx="10" class="system"/>
+    <text x="220" y="45" text-anchor="middle" class="name" style="font-size:18px">Banco de Preguntas Saber PRO</text>
+    <text x="220" y="67" text-anchor="middle" class="tech">[Sistema de software – microservicios Spring Boot]</text>
+    <text x="220" y="98" text-anchor="middle" class="desc">Registra preguntas de selección múltiple, valida su</text>
+    <text x="220" y="116" text-anchor="middle" class="desc">redacción, protege las reglas del dominio (4 opciones,</text>
+    <text x="220" y="134" text-anchor="middle" class="desc">1 clave correcta, justificación ≥ 15 caracteres) y</text>
+    <text x="220" y="152" text-anchor="middle" class="desc">gestiona su ciclo de vida de revisión.</text>
+  </g>
+
+  <!-- Cliente HTTP -->
+  <g transform="translate(60,600)">
+    <rect x="0" y="0" width="290" height="110" rx="10" class="ext"/>
+    <text x="145" y="38" text-anchor="middle" class="name">Thunder Client / Postman</text>
+    <text x="145" y="58" text-anchor="middle" class="tech">[Sistema externo – cliente HTTP]</text>
+    <text x="145" y="82" text-anchor="middle" class="desc">Consume la API REST para las</text>
+    <text x="145" y="98" text-anchor="middle" class="desc">pruebas integradas end-to-end.</text>
+  </g>
+
+  <!-- Docker -->
+  <g transform="translate(850,600)">
+    <rect x="0" y="0" width="290" height="110" rx="10" class="ext"/>
+    <text x="145" y="38" text-anchor="middle" class="name">Docker Engine / Compose</text>
+    <text x="145" y="58" text-anchor="middle" class="tech">[Sistema externo – plataforma]</text>
+    <text x="145" y="82" text-anchor="middle" class="desc">Construye las imágenes y ejecuta</text>
+    <text x="145" y="98" text-anchor="middle" class="desc">los contenedores en saberpro-net.</text>
+  </g>
+
+  <!-- Relaciones -->
+  <path d="M205,282 L470,350" class="arrow" marker-end="url(#ah)"/>
+  <text x="205" y="315" class="rel-b">Crea preguntas y las envía a revisión</text>
+  <text x="250" y="331" class="rel">[JSON/HTTP :8083]</text>
+
+  <path d="M985,282 L730,350" class="arrow" marker-end="url(#ah)"/>
+  <text x="790" y="315" class="rel-b">Consulta, aprueba o rechaza</text>
+  <text x="840" y="331" class="rel">[JSON/HTTP :8083 / :8084]</text>
+
+  <path d="M240,600 L440,520" class="arrow" marker-end="url(#ah)"/>
+  <text x="200" y="560" class="rel-b">Ejecuta las pruebas de la API</text>
+  <text x="235" y="576" class="rel">[HTTP 200 / 201 / 400 / 202]</text>
+
+  <path d="M995,600 L760,520" class="arrow-d" marker-end="url(#ah)"/>
+  <text x="860" y="560" class="rel-b">Despliega y orquesta</text>
+  <text x="840" y="576" class="rel">[docker compose up -d --build]</text>
+
+  <!-- Leyenda -->
+  <g transform="translate(470,600)">
+    <rect x="0" y="0" width="260" height="130" fill="#fafafa" stroke="#ccc"/>
+    <text x="12" y="22" class="legend" font-weight="bold">Leyenda</text>
+    <rect x="12" y="34" width="18" height="14" class="person"/><text x="38" y="46" class="legend">Persona</text>
+    <rect x="12" y="56" width="18" height="14" class="system"/><text x="38" y="68" class="legend">Sistema en alcance</text>
+    <rect x="12" y="78" width="18" height="14" class="ext"/><text x="38" y="90" class="legend">Sistema externo</text>
+    <line x1="12" y1="110" x2="34" y2="110" class="arrow"/><text x="40" y="114" class="legend">Uso síncrono · - - - soporte</text>
+  </g>
+</svg>
+</body></html>

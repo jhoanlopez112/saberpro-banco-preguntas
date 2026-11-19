@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>C4 Nivel 4 - Codigo</title><link rel="stylesheet" href="c4.css"></head>
+<body>
+<svg width="1400" height="1060" viewBox="0 0 1400 1060" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#555"/></marker>
+    <marker id="tri" markerWidth="14" markerHeight="14" refX="13" refY="7" orient="auto"><path d="M0,0 L13,7 L0,14 z" fill="#fff" stroke="#555" stroke-width="1.3"/></marker>
+    <marker id="dia" markerWidth="16" markerHeight="10" refX="1" refY="5" orient="auto"><path d="M1,5 L8,1 L15,5 L8,9 z" fill="#555"/></marker>
+  </defs>
+  <text x="30" y="40" class="title">[Diagrama de Código] Núcleo de dominio y puertos de question-service</text>
+  <text x="30" y="62" class="subtitle">Modelo C4 – Nivel 4 (diagrama de clases UML). Amarillo: dominio puro · Azul: puertos (interfaces) · Gris: adaptadores de infraestructura.</text>
+
+  <!-- ===== Question ===== -->
+  <g transform="translate(470,95)">
+    <rect width="440" height="34" class="cls-h"/>
+    <text x="220" y="15" text-anchor="middle" class="cls-s">«Aggregate Root»</text>
+    <text x="220" y="29" text-anchor="middle" class="cls-t">Question</text>
+    <rect y="34" width="440" height="92" class="cls"/>
+    <text x="10" y="52" class="cls-m">- id: Long</text>
+    <text x="10" y="68" class="cls-m">- enunciado: Enunciado</text>
+    <text x="10" y="84" class="cls-m">- justificacion: Justificacion</text>
+    <text x="10" y="100" class="cls-m">- opciones: List&lt;AnswerOption&gt;   {máx. 4}</text>
+    <text x="10" y="116" class="cls-m">- estado: EstadoPregunta</text>
+    <rect y="126" width="440" height="128" class="cls"/>
+    <text x="10" y="144" class="cls-m">+ crear(Enunciado, Justificacion, List): Question</text>
+    <text x="10" y="160" class="cls-m">+ reconstituir(id, ..., estado): Question</text>
+    <text x="10" y="176" class="cls-m">+ enviarARevision(): void  {4 opciones ∧ 1 clave}</text>
+    <text x="10" y="192" class="cls-m">+ aprobar(): void</text>
+    <text x="10" y="208" class="cls-m">+ rechazar(): void</text>
+    <text x="10" y="224" class="cls-m">+ asignarId(Long): void</text>
+    <text x="10" y="240" class="cls-m">+ getOpciones(): List&lt;AnswerOption&gt; {inmodificable}</text>
+  </g>
+
+  <!-- VOs -->
+  <g transform="translate(40,95)">
+    <rect width="300" height="34" class="cls-h"/>
+    <text x="150" y="15" text-anchor="middle" class="cls-s">«Value Object»</text>
+    <text x="150" y="29" text-anchor="middle" class="cls-t">Enunciado</text>
+    <rect y="34" width="300" height="26" class="cls"/><text x="10" y="52" class="cls-m">- texto: String  {no nulo / no vacío}</text>
+  </g>
+  <g transform="translate(40,185)">
+    <rect width="300" height="34" class="cls-h"/>
+    <text x="150" y="15" text-anchor="middle" class="cls-s">«Value Object»</text>
+    <text x="150" y="29" text-anchor="middle" class="cls-t">Justificacion</text>
+    <rect y="34" width="300" height="42" class="cls"/>
+    <text x="10" y="52" class="cls-m">+ LONGITUD_MINIMA = 15</text>
+    <text x="10" y="68" class="cls-m">- texto: String  {length ≥ 15}</text>
+  </g>
+  <g transform="translate(40,290)">
+    <rect width="300" height="34" class="cls-h"/>
+    <text x="150" y="15" text-anchor="middle" class="cls-s">«Value Object» OpcionRespuesta</text>
+    <text x="150" y="29" text-anchor="middle" class="cls-t">AnswerOption</text>
+    <rect y="34" width="300" height="42" class="cls"/>
+    <text x="10" y="52" class="cls-m">- texto: String</text>
+    <text x="10" y="68" class="cls-m">- correcta: boolean</text>
+  </g>
+  <g transform="translate(1000,95)">
+    <rect width="230" height="34" class="cls-h"/>
+    <text x="115" y="15" text-anchor="middle" class="cls-s">«enumeration»</text>
+    <text x="115" y="29" text-anchor="middle" class="cls-t">EstadoPregunta</text>
+    <rect y="34" width="230" height="74" class="cls"/>
+    <text x="10" y="52" class="cls-m">BORRADOR</text>
+    <text x="10" y="68" class="cls-m">PENDIENTE_REVISION</text>
+    <text x="10" y="84" class="cls-m">APROBADA</text>
+    <text x="10" y="100" class="cls-m">RECHAZADA</text>
+  </g>
+  <g transform="translate(1000,230)">
+    <rect width="360" height="34" class="cls-h"/>
+    <text x="180" y="15" text-anchor="middle" class="cls-s">«exception»</text>
+    <text x="180" y="29" text-anchor="middle" class="cls-t">ReglaNegocioException</text>
+    <rect y="34" width="360" height="26" class="cls"/><text x="10" y="52" class="cls-m">- errores: List&lt;String&gt;   extends RuntimeException</text>
+  </g>
+
+  <path d="M468,135 L342,125" class="arrow" marker-start="url(#dia)"/>
+  <text x="352" y="118" class="rel">1</text>
+  <path d="M468,180 L342,215" class="arrow" marker-start="url(#dia)"/>
+  <text x="352" y="208" class="rel">1</text>
+  <path d="M468,225 L342,320" class="arrow" marker-start="url(#dia)"/>
+  <text x="350" y="300" class="rel">0..4</text>
+  <path d="M912,150 L998,150" class="arrow" marker-end="url(#ah)"/>
+  <path d="M912,230 L998,255" class="arrow-d" marker-end="url(#ah)"/>
+  <text x="920" y="268" class="rel">«throws»</text>
+
+  <!-- ===== Puertos de entrada ===== -->
+  <g transform="translate(40,420)">
+    <rect width="330" height="34" class="cls-port-h"/>
+    <text x="165" y="15" text-anchor="middle" class="cls-s">«interface» inbound</text>
+    <text x="165" y="29" text-anchor="middle" class="cls-t">CrearPreguntaUseCase</text>
+    <rect y="34" width="330" height="26" class="cls-port"/><text x="10" y="52" class="cls-m">+ crearPregunta(CrearPreguntaCommand): Question</text>
+  </g>
+  <g transform="translate(40,500)">
+    <rect width="330" height="34" class="cls-port-h"/>
+    <text x="165" y="15" text-anchor="middle" class="cls-s">«interface» inbound</text>
+    <text x="165" y="29" text-anchor="middle" class="cls-t">EvaluarPreguntaUseCase</text>
+    <rect y="34" width="330" height="58" class="cls-port"/>
+    <text x="10" y="52" class="cls-m">+ enviarARevision(Long): Question</text>
+    <text x="10" y="68" class="cls-m">+ aprobar(Long): Question</text>
+    <text x="10" y="84" class="cls-m">+ rechazar(Long): Question</text>
+  </g>
+  <g transform="translate(40,610)">
+    <rect width="330" height="34" class="cls-port-h"/>
+    <text x="165" y="15" text-anchor="middle" class="cls-s">«interface» inbound</text>
+    <text x="165" y="29" text-anchor="middle" class="cls-t">ConsultarPreguntaUseCase</text>
+    <rect y="34" width="330" height="42" class="cls-port"/>
+    <text x="10" y="52" class="cls-m">+ listarPreguntas(): List&lt;Question&gt;</text>
+    <text x="10" y="68" class="cls-m">+ obtenerPregunta(Long): Question</text>
+  </g>
+
+  <!-- ===== Servicio de aplicación ===== -->
+  <g transform="translate(500,470)">
+    <rect width="380" height="34" class="cls-h" style="fill:#f3e1c2"/>
+    <text x="190" y="15" text-anchor="middle" class="cls-s">«application service»</text>
+    <text x="190" y="29" text-anchor="middle" class="cls-t">QuestionApplicationService</text>
+    <rect y="34" width="380" height="58" class="cls"/>
+    <text x="10" y="52" class="cls-m">- repositorio: PreguntaRepositoryPort</text>
+    <text x="10" y="68" class="cls-m">- notificador: NotificacionPort</text>
+    <text x="10" y="84" class="cls-m">- validador: ValidacionPort</text>
+    <rect y="92" width="380" height="42" class="cls"/>
+    <text x="10" y="110" class="cls-m">+ crearPregunta(cmd) · enviarARevision(id)</text>
+    <text x="10" y="126" class="cls-m">+ aprobar(id) · rechazar(id) · listar/obtener</text>
+  </g>
+  <path d="M498,500 L372,450" class="arrow-d" marker-end="url(#tri)"/>
+  <path d="M498,540 L372,545" class="arrow-d" marker-end="url(#tri)"/>
+  <path d="M498,580 L372,640" class="arrow-d" marker-end="url(#tri)"/>
+  <text x="400" y="600" class="rel">«implements»</text>
+  <path d="M690,470 L690,351" class="arrow" marker-end="url(#ah)"/>
+  <text x="698" y="420" class="rel">usa / modifica</text>
+
+  <!-- ===== Puertos de salida ===== -->
+  <g transform="translate(1000,420)">
+    <rect width="360" height="34" class="cls-port-h"/>
+    <text x="180" y="15" text-anchor="middle" class="cls-s">«interface» outbound</text>
+    <text x="180" y="29" text-anchor="middle" class="cls-t">PreguntaRepositoryPort</text>
+    <rect y="34" width="360" height="58" class="cls-port"/>
+    <text x="10" y="52" class="cls-m">+ guardar(Question): Question</text>
+    <text x="10" y="68" class="cls-m">+ buscarPorId(Long): Optional&lt;Question&gt;</text>
+    <text x="10" y="84" class="cls-m">+ listarTodas(): List&lt;Question&gt;</text>
+  </g>
+  <g transform="translate(1000,530)">
+    <rect width="360" height="34" class="cls-port-h"/>
+    <text x="180" y="15" text-anchor="middle" class="cls-s">«interface» outbound</text>
+    <text x="180" y="29" text-anchor="middle" class="cls-t">NotificacionPort</text>
+    <rect y="34" width="360" height="26" class="cls-port"/><text x="10" y="52" class="cls-m">+ notificarEnvioARevision(Question): void</text>
+  </g>
+  <g transform="translate(1000,610)">
+    <rect width="360" height="34" class="cls-port-h"/>
+    <text x="180" y="15" text-anchor="middle" class="cls-s">«interface» outbound</text>
+    <text x="180" y="29" text-anchor="middle" class="cls-t">ValidacionPort</text>
+    <rect y="34" width="360" height="26" class="cls-port"/><text x="10" y="52" class="cls-m">+ validar(Question): ResultadoValidacion</text>
+  </g>
+  <path d="M882,510 L998,470" class="arrow" marker-end="url(#ah)"/>
+  <path d="M882,540 L998,560" class="arrow" marker-end="url(#ah)"/>
+  <path d="M882,575 L998,640" class="arrow" marker-end="url(#ah)"/>
+  <text x="900" y="610" class="rel">«uses»</text>
+
+  <!-- ===== Adaptadores ===== -->
+  <rect x="30" y="760" width="1340" height="270" rx="12" fill="none" stroke="#888" stroke-dasharray="6 4"/>
+  <text x="46" y="782" class="blabel">infrastructure/ (adaptadores que implementan los puertos de salida) · api/ (adaptador primario)</text>
+
+  <g transform="translate(50,800)">
+    <rect width="300" height="34" class="cls-adp-h"/>
+    <text x="150" y="15" text-anchor="middle" class="cls-s">«adapter» jpa</text>
+    <text x="150" y="29" text-anchor="middle" class="cls-t">JpaQuestionAdapter</text>
+    <rect y="34" width="300" height="42" class="cls-adp"/>
+    <text x="10" y="52" class="cls-m">- repositorio: SpringDataQuestionRepository</text>
+    <text x="10" y="68" class="cls-m">- mapper: QuestionDomainMapper</text>
+  </g>
+  <g transform="translate(50,900)">
+    <rect width="300" height="34" class="cls-adp-h"/>
+    <text x="150" y="15" text-anchor="middle" class="cls-s">«@Entity»</text>
+    <text x="150" y="29" text-anchor="middle" class="cls-t">QuestionRecord</text>
+    <rect y="34" width="300" height="76" class="cls-adp"/>
+    <text x="10" y="52" class="cls-m">- id · enunciado · justificacion</text>
+    <text x="10" y="68" class="cls-m">- estado: EstadoPregunta</text>
+    <text x="10" y="84" class="cls-m">- opciones: List&lt;AnswerOptionRecord&gt;</text>
+    <text x="10" y="100" class="cls-m">  @ElementCollection @OrderColumn</text>
+  </g>
+  <path d="M200,876 L200,898" class="arrow" marker-end="url(#ah)"/>
+
+  <g transform="translate(380,800)">
+    <rect width="280" height="34" class="cls-adp-h"/>
+    <text x="140" y="15" text-anchor="middle" class="cls-s">«adapter» memory</text>
+    <text x="140" y="29" text-anchor="middle" class="cls-t">InMemoryQuestionAdapter</text>
+    <rect y="34" width="280" height="42" class="cls-adp"/>
+    <text x="10" y="52" class="cls-m">- almacen: ConcurrentHashMap</text>
+    <text x="10" y="68" class="cls-m">- secuencia: AtomicLong</text>
+  </g>
+  <g transform="translate(690,800)">
+    <rect width="300" height="34" class="cls-adp-h"/>
+    <text x="150" y="15" text-anchor="middle" class="cls-s">«adapter» messaging</text>
+    <text x="150" y="29" text-anchor="middle" class="cls-t">RabbitMQPublisher</text>
+    <rect y="34" width="300" height="26" class="cls-adp"/>
+    <text x="10" y="52" class="cls-m">- rabbitTemplate: RabbitTemplate</text>
+  </g>
+  <g transform="translate(1020,800)">
+    <rect width="330" height="34" class="cls-adp-h"/>
+    <text x="165" y="15" text-anchor="middle" class="cls-s">«adapter» rest</text>
+    <text x="165" y="29" text-anchor="middle" class="cls-t">ValidationServiceClient</text>
+    <rect y="34" width="330" height="26" class="cls-adp"/>
+    <text x="10" y="52" class="cls-m">- restClient: RestClient</text>
+  </g>
+  <g transform="translate(690,920)">
+    <rect width="300" height="34" class="cls-adp-h"/>
+    <text x="150" y="15" text-anchor="middle" class="cls-s">«primary adapter» api</text>
+    <text x="150" y="29" text-anchor="middle" class="cls-t">QuestionRestController</text>
+    <rect y="34" width="300" height="42" class="cls-adp"/>
+    <text x="10" y="52" class="cls-m">usa los 3 puertos de entrada</text>
+    <text x="10" y="68" class="cls-m">GET/POST /api/preguntas…</text>
+  </g>
+  <g transform="translate(1020,920)">
+    <rect width="330" height="34" class="cls-adp-h"/>
+    <text x="165" y="15" text-anchor="middle" class="cls-s">«@Configuration»</text>
+    <text x="165" y="29" text-anchor="middle" class="cls-t">HexagonalConfig</text>
+    <rect y="34" width="330" height="42" class="cls-adp"/>
+    <text x="10" y="52" class="cls-m">@Bean jpa | memory (ConditionalOnProperty)</text>
+    <text x="10" y="68" class="cls-m">@Bean QuestionApplicationService</text>
+  </g>
+
+  <!-- implementaciones -->
+  <!-- Jpa + InMemory implementan PreguntaRepositoryPort -->
+  <path d="M200,798 L200,745 L990,745 L990,480 L998,480" class="arrow-d" marker-end="url(#tri)"/>
+  <path d="M520,798 L520,745" class="arrow-d"/>
+  <text x="225" y="738" class="rel">«implements» PreguntaRepositoryPort</text>
+  <!-- RabbitMQPublisher implementa NotificacionPort -->
+  <path d="M840,798 L840,722 L968,722 L968,580 L998,580" class="arrow-d" marker-end="url(#tri)"/>
+  <text x="848" y="715" class="rel">«implements»</text>
+  <!-- ValidationServiceClient implementa ValidacionPort -->
+  <path d="M1185,798 L1185,672" class="arrow-d" marker-end="url(#tri)"/>
+  <text x="1195" y="740" class="rel">«implements»</text>
+  <!-- El controlador usa los puertos de entrada -->
+  <path d="M690,975 L672,975 L672,708 L205,708 L205,688" class="arrow" marker-end="url(#ah)"/>
+  <text x="440" y="702" class="rel">«uses» (QuestionRestController)</text>
+</svg>
+</body></html>

@@ -1,0 +1,37 @@
+html, body { margin: 0; padding: 0; background: #ffffff; font-family: Arial, Helvetica, sans-serif; }
+svg { display: block; }
+svg text { font-family: Arial, Helvetica, sans-serif; }
+.title { font-size: 22px; font-weight: bold; fill: #1b1b1b; }
+.subtitle { font-size: 13px; fill: #555; }
+.name { font-size: 15px; font-weight: bold; fill: #fff; }
+.tech { font-size: 11.5px; fill: #f0f6ff; font-style: italic; }
+.desc { font-size: 12px; fill: #fff; }
+.dark { fill: #1b1b1b; }
+.dark-i { fill: #333; font-style: italic; }
+.rel { font-size: 11.5px; fill: #333; paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+.rel-b { font-size: 11.5px; fill: #333; font-weight: bold; paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+.boundary { fill: none; stroke: #444; stroke-width: 1.5; stroke-dasharray: 8 5; }
+.blabel { font-size: 13px; font-weight: bold; fill: #444; }
+.arrow { stroke: #555; stroke-width: 1.6; fill: none; }
+.arrow-d { stroke: #555; stroke-width: 1.6; fill: none; stroke-dasharray: 6 4; }
+.person { fill: #08427b; }
+.system { fill: #1168bd; }
+.ext { fill: #8a8a8a; }
+.container { fill: #438dd5; }
+.db { fill: #438dd5; }
+.component { fill: #85bbf0; }
+.component-name { font-size: 14px; font-weight: bold; fill: #0b2a4a; }
+.component-tech { font-size: 11px; fill: #1d4673; font-style: italic; }
+.component-desc { font-size: 11.5px; fill: #0b2a4a; }
+.legend { font-size: 11.5px; fill: #333; }
+.cls { fill: #fffdf3; stroke: #6b5b2a; stroke-width: 1.3; }
+.cls-h { fill: #f6e7b0; stroke: #6b5b2a; stroke-width: 1.3; }
+.cls-port { fill: #eef6ff; stroke: #2a4f7a; stroke-width: 1.3; }
+.cls-port-h { fill: #cfe3fb; stroke: #2a4f7a; stroke-width: 1.3; }
+.cls-adp { fill: #f2f2f2; stroke: #555; stroke-width: 1.3; }
+.cls-adp-h { fill: #dcdcdc; stroke: #555; stroke-width: 1.3; }
+.cls-t { font-size: 13px; font-weight: bold; fill: #1b1b1b; }
+.cls-s { font-size: 10.5px; fill: #555; font-style: italic; }
+.cls-m { font-size: 11px; fill: #222; font-family: Consolas, "Courier New", monospace; }
+.layer { fill: none; stroke-width: 2; rx: 14; }
+.layer-label { font-size: 14px; font-weight: bold; }
