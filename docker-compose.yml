@@ -1,0 +1,88 @@
+# Orquestador multi-contenedor del Banco de Preguntas Saber PRO
+# Uso:  docker compose up -d --build
+
+networks:
+  saberpro-net:
+    name: saberpro-net
+    driver: bridge
+
+volumes:
+  saberpro-pgdata:
+    name: saberpro-pgdata
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: saberpro-rabbitmq
+    ports:
+      - "5672:5672"     # AMQP
+      - "15672:15672"   # Consola de administración (guest / guest)
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - saberpro-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: saberpro-postgres
+    environment:
+      - POSTGRES_DB=saberpro
+      - POSTGRES_USER=saberpro
+      - POSTGRES_PASSWORD=saberpro
+    volumes:
+      - saberpro-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U saberpro -d saberpro"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - saberpro-net
+
+  validation-service:
+    build: ./validation-service
+    container_name: saberpro-validation-service
+    ports:
+      - "8082:8082"
+    networks:
+      - saberpro-net
+
+  question-service:
+    build: ./question-service
+    container_name: saberpro-question-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - VALIDATION_SERVICE_URL=http://validation-service:8082
+      # Adaptador de persistencia: jpa (PostgreSQL, por defecto) | memory (HashMap)
+      # Cambiar sin editar este archivo:  SABERPRO_PERSISTENCE_ADAPTER=memory docker compose up -d question-service
+      - SABERPRO_PERSISTENCE_ADAPTER=${SABERPRO_PERSISTENCE_ADAPTER:-jpa}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/saberpro
+      - SPRING_DATASOURCE_USERNAME=saberpro
+      - SPRING_DATASOURCE_PASSWORD=saberpro
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      validation-service:
+        condition: service_started
+    networks:
+      - saberpro-net
+
+  lifecycle-service:
+    build: ./lifecycle-service
+    container_name: saberpro-lifecycle-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - saberpro-net
