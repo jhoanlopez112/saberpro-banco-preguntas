@@ -1,0 +1,106 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "Saber PRO - Taller 13",
+  "collectionId": "7b0a5f9e-1c3d-4a8e-9f21-5d6c7e8f9a01",
+  "dateExported": "2026-11-18T23:00:00.000Z",
+  "version": "1.2",
+  "folders": [],
+  "requests": [
+    {
+      "_id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "colId": "7b0a5f9e-1c3d-4a8e-9f21-5d6c7e8f9a01",
+      "containerId": "",
+      "name": "b) GET listar preguntas (200)",
+      "url": "http://localhost:8083/api/preguntas",
+      "method": "GET",
+      "sortNum": 10000,
+      "created": "2026-11-18T23:00:00.000Z",
+      "modified": "2026-11-18T23:00:00.000Z",
+      "headers": [],
+      "tests": [{ "type": "res-code", "custom": "", "action": "equal", "value": "200" }]
+    },
+    {
+      "_id": "a1b2c3d4-0002-4000-8000-000000000002",
+      "colId": "7b0a5f9e-1c3d-4a8e-9f21-5d6c7e8f9a01",
+      "containerId": "",
+      "name": "c) POST crear pregunta valida (201)",
+      "url": "http://localhost:8083/api/preguntas",
+      "method": "POST",
+      "sortNum": 20000,
+      "created": "2026-11-18T23:00:00.000Z",
+      "modified": "2026-11-18T23:00:00.000Z",
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"enunciado\": \"¿Qué patrón arquitectónico aísla el dominio mediante puertos y adaptadores?\",\n  \"justificacion\": \"La arquitectura hexagonal separa el núcleo de negocio de la infraestructura.\",\n  \"opciones\": [\n    { \"texto\": \"Arquitectura Hexagonal\", \"correcta\": true },\n    { \"texto\": \"Singleton\", \"correcta\": false },\n    { \"texto\": \"Modelo Vista Controlador\", \"correcta\": false },\n    { \"texto\": \"Observer\", \"correcta\": false }\n  ]\n}",
+        "form": []
+      },
+      "tests": [
+        { "type": "res-code", "custom": "", "action": "equal", "value": "201" },
+        { "type": "set-env-var", "custom": "json.id", "action": "setto", "value": "{{preguntaId}}" }
+      ]
+    },
+    {
+      "_id": "a1b2c3d4-0003-4000-8000-000000000003",
+      "colId": "7b0a5f9e-1c3d-4a8e-9f21-5d6c7e8f9a01",
+      "containerId": "",
+      "name": "c') POST justificacion corta (400)",
+      "url": "http://localhost:8083/api/preguntas",
+      "method": "POST",
+      "sortNum": 30000,
+      "created": "2026-11-18T23:00:00.000Z",
+      "modified": "2026-11-18T23:00:00.000Z",
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"enunciado\": \"¿Cuál es el puerto de la consola de RabbitMQ?\",\n  \"justificacion\": \"Es el 15672\",\n  \"opciones\": [\n    { \"texto\": \"15672\", \"correcta\": true },\n    { \"texto\": \"5672\", \"correcta\": false },\n    { \"texto\": \"8083\", \"correcta\": false },\n    { \"texto\": \"5432\", \"correcta\": false }\n  ]\n}",
+        "form": []
+      },
+      "tests": [{ "type": "res-code", "custom": "", "action": "equal", "value": "400" }]
+    },
+    {
+      "_id": "a1b2c3d4-0004-4000-8000-000000000004",
+      "colId": "7b0a5f9e-1c3d-4a8e-9f21-5d6c7e8f9a01",
+      "containerId": "",
+      "name": "c'') POST opciones repetidas (400 validation-service)",
+      "url": "http://localhost:8083/api/preguntas",
+      "method": "POST",
+      "sortNum": 40000,
+      "created": "2026-11-18T23:00:00.000Z",
+      "modified": "2026-11-18T23:00:00.000Z",
+      "headers": [{ "name": "Content-Type", "value": "application/json" }],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"enunciado\": \"¿Qué comando levanta el ecosistema en segundo plano?\",\n  \"justificacion\": \"La bandera -d ejecuta los contenedores en segundo plano.\",\n  \"opciones\": [\n    { \"texto\": \"docker compose up -d\", \"correcta\": true },\n    { \"texto\": \"docker compose up -d\", \"correcta\": false },\n    { \"texto\": \"docker ps\", \"correcta\": false },\n    { \"texto\": \"docker logs\", \"correcta\": false }\n  ]\n}",
+        "form": []
+      },
+      "tests": [{ "type": "res-code", "custom": "", "action": "equal", "value": "400" }]
+    },
+    {
+      "_id": "a1b2c3d4-0005-4000-8000-000000000005",
+      "colId": "7b0a5f9e-1c3d-4a8e-9f21-5d6c7e8f9a01",
+      "containerId": "",
+      "name": "d) POST enviar a revision (202)",
+      "url": "http://localhost:8083/api/preguntas/{{preguntaId}}/enviar-revision",
+      "method": "POST",
+      "sortNum": 50000,
+      "created": "2026-11-18T23:00:00.000Z",
+      "modified": "2026-11-18T23:00:00.000Z",
+      "headers": [],
+      "tests": [{ "type": "res-code", "custom": "", "action": "equal", "value": "202" }]
+    },
+    {
+      "_id": "a1b2c3d4-0006-4000-8000-000000000006",
+      "colId": "7b0a5f9e-1c3d-4a8e-9f21-5d6c7e8f9a01",
+      "containerId": "",
+      "name": "e) GET revisiones recibidas en lifecycle-service (200)",
+      "url": "http://localhost:8084/api/revisiones",
+      "method": "GET",
+      "sortNum": 60000,
+      "created": "2026-11-18T23:00:00.000Z",
+      "modified": "2026-11-18T23:00:00.000Z",
+      "headers": [],
+      "tests": [{ "type": "res-code", "custom": "", "action": "equal", "value": "200" }]
+    }
+  ]
+}

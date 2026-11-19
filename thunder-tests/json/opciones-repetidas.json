@@ -1,0 +1,22 @@
+{
+  "enunciado": "¿Qué comando levanta el ecosistema en segundo plano?",
+  "justificacion": "La bandera -d ejecuta los contenedores en segundo plano.",
+  "opciones": [
+    {
+      "texto": "docker compose up -d",
+      "correcta": true
+    },
+    {
+      "texto": "docker compose up -d",
+      "correcta": false
+    },
+    {
+      "texto": "docker ps",
+      "correcta": false
+    },
+    {
+      "texto": "docker logs",
+      "correcta": false
+    }
+  ]
+}

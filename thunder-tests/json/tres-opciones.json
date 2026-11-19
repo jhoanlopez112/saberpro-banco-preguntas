@@ -1,0 +1,18 @@
+{
+  "enunciado": "¿Qué red bridge comunica los contenedores del proyecto?",
+  "justificacion": "Docker Compose declara la red saberpro-net de tipo bridge.",
+  "opciones": [
+    {
+      "texto": "saberpro-net",
+      "correcta": true
+    },
+    {
+      "texto": "host",
+      "correcta": false
+    },
+    {
+      "texto": "none",
+      "correcta": false
+    }
+  ]
+}

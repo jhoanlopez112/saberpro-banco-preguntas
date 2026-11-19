@@ -1,0 +1,22 @@
+{
+  "enunciado": "¿Cuál es el puerto de la consola de RabbitMQ?",
+  "justificacion": "Es el 15672",
+  "opciones": [
+    {
+      "texto": "15672",
+      "correcta": true
+    },
+    {
+      "texto": "5672",
+      "correcta": false
+    },
+    {
+      "texto": "8083",
+      "correcta": false
+    },
+    {
+      "texto": "5432",
+      "correcta": false
+    }
+  ]
+}

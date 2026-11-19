@@ -1,0 +1,22 @@
+{
+  "enunciado": "¿Qué patrón arquitectónico aísla el dominio mediante puertos y adaptadores?",
+  "justificacion": "La arquitectura hexagonal separa el núcleo de negocio de la infraestructura.",
+  "opciones": [
+    {
+      "texto": "Arquitectura Hexagonal",
+      "correcta": true
+    },
+    {
+      "texto": "Singleton",
+      "correcta": false
+    },
+    {
+      "texto": "Modelo Vista Controlador",
+      "correcta": false
+    },
+    {
+      "texto": "Observer",
+      "correcta": false
+    }
+  ]
+}
